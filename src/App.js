@@ -48,7 +48,9 @@ function App() {
             onDragEnter={(e) => handleDragEnter(e, index)}
             onDragLeave={(e) => handleDragLeave(e)}
             onDrop={(e) => handleDrop(e)}
-            onDragOver={(e) => e.preventDefault()}>{listItem}
+            onDragOver={(e) => e.preventDefault()}
+            >
+            {listItem}
             </li></div>
         )})}</>          
     )
