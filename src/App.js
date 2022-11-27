@@ -3,8 +3,7 @@ import './App.css';
 
 function App() {
   const [toDoArray, refreshList] = useState(["Open fancy new to-do list", "Adjust to fancy font", "Start clearing finished tasks"])
-  
-  
+  const [dragItem, setDragItem] = useState();
   const removeFromList = (index) => {
     let tempArray=[...toDoArray];
     tempArray.splice(index,1);
@@ -17,14 +16,44 @@ function App() {
         case 1:return "dark-todoitem";
         default:return "error-class";
       }};
-          return (          
-            <>{toDoArray.map((listItem, index) => {
-              return (
-              <div key={index}  className="to-do-entry"><button onClick={() => {removeFromList(index)}} className={SetClass(index)} >✓</button><li>{listItem}</li></div>
-              )})}</>          
-          )
+    const handleDragStart = (index) => {
+      setDragItem(index);
+    };
+    
+    const handleDragEnter = (e, index) => {
+      // e.target.style.backgroundColor = "#336699";
+      const newList = [...toDoArray];
+      const item = newList[dragItem];
+      newList.splice(dragItem, 1);
+      newList.splice(index, 0, item);
+      setDragItem(index);
+      refreshList(newList);
+    };
+    
+    const handleDragLeave = (e) => {
+      e.target.style.backgroundColor = "black";
+    };
+    
+    const handleDrop = (e) => {
+      e.target.style.backgroundColor = "black";
+    };
+    return (          
+      <>{toDoArray.map((listItem, index) => {
+        return (
+        <div key={index}  className="to-do-entry"><button onClick={() => {removeFromList(index)}} className={SetClass(index)} >✓</button>
+        <li              
+            draggable
+            key={index}
+            onDragStart={() => handleDragStart(index)}
+            onDragEnter={(e) => handleDragEnter(e, index)}
+            onDragLeave={(e) => handleDragLeave(e)}
+            onDrop={(e) => handleDrop(e)}
+            onDragOver={(e) => e.preventDefault()}>{listItem}
+            </li></div>
+        )})}</>          
+    )
 
-}
+  }
   const List = (props) => {
     return (
       <ul>
